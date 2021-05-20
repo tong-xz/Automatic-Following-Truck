@@ -1,9 +1,11 @@
+# This file used to control basic movement
+
 from gpiozero import PWMLED
 from time import sleep
 
 
 # left wheel A
-# left wheel B
+# right wheel B
 A_Power = PWMLED(4)
 A_Reverse = PWMLED(17)
 A_Park = PWMLED(27)
@@ -40,20 +42,3 @@ def turn_left(velocity):
     B_Reverse.value = 0.0
     A_Power.value = velocity
     B_Power.value = velocity
-
-
-def main():
-    while True:
-        turn_left(0.2)
-        sleep(4)
-        turn_right(0.2)
-        sleep(4)
-        forward(0.2)
-        sleep(4)
-        backward(0.2)
-        sleep(4)
-
-
-if __name__ == "__main__":
-    # execute only if run as a script
-    main()

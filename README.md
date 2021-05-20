@@ -2,9 +2,7 @@
 
 自动跟随搬运小车
 
-## Wheel assignment
-
-
+## GPIO assignment
 
 |      Component | Function | GPIO | Pin  |
 | -------------: | :------- | :--- | ---- |
@@ -19,9 +17,8 @@
 |                | REVERSE  | 23   |      |
 |                | PARK     | 24   |      |
 |                | VCC      |      | 4    |
-
-
-
-B: right wheel
+|                |          |      |      |
+|            UWB | GET_A    | 1    |      |
+|                | GET_A    | 2    |      |
 
 ![473ef1a940c8f5e19a9cb56acd2339a](image/473ef1a940c8f5e19a9cb56acd2339a.jpg)
