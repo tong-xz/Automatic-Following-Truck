@@ -8,7 +8,7 @@ import recv
 to_C = 0.2
 
 
-def __get_distance(to_a, to_b) -> float:
+def get_distance(to_a, to_b) -> float:
     """
     Get the distance from person to car 
     用了余弦定理
@@ -21,7 +21,7 @@ def __get_distance(to_a, to_b) -> float:
     return distance
 
 
-def get_direction_degree(to_a, to_b) -> (int, float):
+def get_direction_degree(to_a, to_b, distance) -> (int, float):
     """
     Get the (direction, degree) of turn direction
 
@@ -31,7 +31,6 @@ def get_direction_degree(to_a, to_b) -> (int, float):
     degree:
         The cos of angle from the person to the midpoint of the car
     """
-    distance = __get_distance(to_a, to_b)
     # determin direction
     if to_a > to_b:
         direction = 0
