@@ -30,6 +30,8 @@ def __get_uwb_distance(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
+            logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
+            logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
             __q_uwb_a.put(int(str(rcv0)[4:-1], 16)/10)
             __q_uwb_b.put(int(str(rcv1)[4:-1], 16)/10)
         except:
@@ -65,6 +67,7 @@ def get_distance():
     #     q_to_a.put(to_a / 10)
     #     q_to_b.put(to_b / 10)
     p0, p1 = init.serial_init_port()
+    logger("get_uwb_distance")
     threading.Thread(target=__get_uwb_distance, args=(
         p0, p1), name="get_uwb_distance").start()
     q_to_a.put(__q_uwb_a.get())
