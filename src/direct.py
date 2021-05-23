@@ -14,10 +14,10 @@ def __get_distance(to_a, to_b) -> float:
     用了余弦定理
     """
     # Degree between a and c
-    degree_AC = math.acos((to_a**2+to_C**2-to_b**2) / 2*to_a*to_C)
+    degree_ac = math.acos((to_a**2+to_C**2-to_b**2) / 2*to_a*to_C)
     # degree_BC = acos((to_b**2+to_C**2-to_a**2) / 2*to_b*to_C)
     # degree = acos((to_a**2-to_C**2+to_b**2) / 2*to_a*to_b)
-    distance = to_a*math.sin(degree_AC)
+    distance = to_a*math.sin(degree_ac)
     return distance
 
 
@@ -26,8 +26,8 @@ def get_direction_degree(to_a, to_b) -> (int, float):
     Get the (direction, degree) of turn direction
 
     diretion: 
-        0 = left
-        1 = right
+        0=left
+        1=right
     degree:
         The cos of angle from the person to the midpoint of the car
     """

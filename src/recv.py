@@ -69,16 +69,3 @@ def get_distance():
         p0, p1), name="get_uwb_distance").start()
     q_to_a.put(__q_uwb_a.get())
     q_to_b.put(__q_uwb_b.get())
-
-
-if __name__ == "__main__":
-    # p0, p1 = init.serial_init_port()
-    dev.generate_random_queue(__q_uwb_a, __q_uwb_b)
-
-    # threading.Thread(target=get_uwb_distance, args=(
-    #     p0, p1), name="get_uwb_distance").start()
-    threading.Thread(target=get_distance, name="avg_distance").start()
-    while (True):
-
-        print(q_to_a.get())
-        print(q_to_b.get())

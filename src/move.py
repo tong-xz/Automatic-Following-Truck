@@ -1,5 +1,7 @@
 """
 This file used to control basic movement
+
+0 < velocity < 1
 """
 
 from gpiozero import PWMLED
