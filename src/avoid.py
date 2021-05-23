@@ -1,28 +1,28 @@
 # This module is used to get the data of Avoiding obstacles components
 
-import gpiozero
+from gpiozero import DistanceSensor
+from time import sleep
+
+sensor_head_left = DistanceSensor()
+sensor_head_right = DistanceSensor()
+sensor_head_middle = DistanceSensor()
+sensor_body_left = DistanceSensor()
+snesor_body_right = DistanceSensor()
 
 
-def get_raw_avoid_data() -> ():
-    # down sensor
-    lineSensor_5 = gpiozero.LineSensor(3)
+def get_distances() -> (list):
+    while True:
+        distance_list = []
+        distance_list[0] = sensor_head_left
+        distance_list[1] = sensor_head_right
+        return distance_list
 
-    # front sensors
-    lineSensor_0 = gpiozero.LineSensor(5)
-    lineSensor_1 = gpiozero.LineSensor(6)
-    lineSensor_2 = gpiozero.LineSensor(7)
 
-    # side sensors
-    lineSensor_3 = gpiozero.LineSensor(8)
-    lineSensor_4 = gpiozero.LineSensor(9)
-    # lineSensor_5 = gpiozero.LineSensor(3)
-
-    # # front sensors
-    # lineSensor_0 = gpiozero.LineSensor(5)
-    # lineSensor_1 = gpiozero.LineSensor(6)
-    # lineSensor_2 = gpiozero.LineSensor(7)
-
-    # # side sensors
-    # lineSensor_3 = gpiozero.LineSensor(8)
-    # lineSensor_4 = gpiozero.LineSensor(9)
-    return (lineSensor_0, lineSensor_1, lineSensor_2, lineSensor_3, lineSensor_4, lineSensor_5)
+# 0-turn left
+# 1-turn right
+def turn_decision(distance_list) -> (int):
+    if(distance_list[0] < 0.3 & distance_list[1] < 0.3):
+        if(distance_list[0] > distance_list[1]):
+            return 0
+        else:
+            return 1

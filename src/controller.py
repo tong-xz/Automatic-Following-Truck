@@ -17,6 +17,5 @@ def control():
     while (True):
         to_a, to_b = __resume_distance()
         direction, degree = direct.get_direction_degree()
-        move.
 
     # threading.Thread(target=recv.avg_distance, name="avg_distance").start()
