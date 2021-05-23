@@ -24,21 +24,31 @@ def forward(velocity):
 def backward(velocity):
     A_Reverse.value = 0.0
     B_Reverse.value = 1.0
-    print('2')
     A_Power.value = velocity
     B_Power.value = velocity
-    print('1')
 
 
-def turn_right(velocity):
+def turn_right(velocity_left, velocity_right):
     A_Reverse.value = 1.0
     B_Reverse.value = 1.0
-    A_Power.value = velocity
-    B_Power.value = velocity
+    A_Power.value = velocity_left
+    B_Power.value = velocity_right
 
 
-def turn_left(velocity):
+def turn_left(velocity_left, velocity_right):
     A_Reverse.value = 0.0
     B_Reverse.value = 0.0
-    A_Power.value = velocity
-    B_Power.value = velocity
+    A_Power.value = velocity_left
+    B_Power.value = velocity_right
+#停车
+def stop(stop_time):
+    A_Power=0
+    B_Power=0
+    sleep(stop_time)
+
+#驻车
+def park():
+    A_Power=0
+    B_Power=0
+    A_Park=1
+    B_Park=1
