@@ -1,4 +1,6 @@
-# This file used to control basic movement
+"""
+This file used to control basic movement
+"""
 
 from gpiozero import PWMLED
 from time import sleep
@@ -6,39 +8,37 @@ from time import sleep
 
 # left wheel A
 # right wheel B
-A_Power = PWMLED(4)
-A_Reverse = PWMLED(17)
-A_Park = PWMLED(27)
-B_Power = PWMLED(18)
-B_Reverse = PWMLED(23)
-B_Park = PWMLED(24)
+__A_Power = PWMLED(4)
+__A_Reverse = PWMLED(17)
+__A_Park = PWMLED(27)
+__B_Power = PWMLED(18)
+__B_Reverse = PWMLED(23)
+__B_Park = PWMLED(24)
 
 
 def forward(velocity):
-    A_Reverse.value = 1.0
-    B_Reverse.value = 0.0
-    A_Power.value = velocity
-    B_Power.value = velocity
+    __A_Reverse.value = 1.0
+    __B_Reverse.value = 0.0
+    __A_Power.value = velocity
+    __B_Power.value = velocity
 
 
 def backward(velocity):
-    A_Reverse.value = 0.0
-    B_Reverse.value = 1.0
-    print('2')
-    A_Power.value = velocity
-    B_Power.value = velocity
-    print('1')
+    __A_Reverse.value = 0.0
+    __B_Reverse.value = 1.0
+    __A_Power.value = velocity
+    __B_Power.value = velocity
 
 
 def turn_right(velocity):
-    A_Reverse.value = 1.0
-    B_Reverse.value = 1.0
-    A_Power.value = velocity
-    B_Power.value = velocity
+    __A_Reverse.value = 1.0
+    __B_Reverse.value = 1.0
+    __A_Power.value = velocity
+    __B_Power.value = velocity
 
 
 def turn_left(velocity):
-    A_Reverse.value = 0.0
-    B_Reverse.value = 0.0
-    A_Power.value = velocity
-    B_Power.value = velocity
+    __A_Reverse.value = 0.0
+    __B_Reverse.value = 0.0
+    __A_Power.value = velocity
+    __B_Power.value = velocity

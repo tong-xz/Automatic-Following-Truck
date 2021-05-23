@@ -1,3 +1,14 @@
+import threading
+import recv
+
+# port initialize
+uwb_port0, uwb_port1 = recv.serial_init_port()
+
+# Threads initialize
+uwb_thread = threading.Thread(
+    target=recv.__get_uwb_distance, args=(uwb_port0, uwb_port1), name="uwb_threading")
+uwb_thread.start()
+
 
 def main():
     while True:
