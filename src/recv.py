@@ -42,7 +42,7 @@ def _get_uwb_distance(port0, port1):
 
 def _get_uwb_distance_1(port0, port1):
     """
-    用 struct 来解码
+    use struct to decode 
     """
     while True:
         # try:

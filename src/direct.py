@@ -16,7 +16,7 @@ class MesureByEi():
     def get_distance(self, to_a, to_b) -> float:
         """
         Get the REALL distance from person to car 
-        用了余弦定理
+        use cos
         """
         # Degree between a and c
         degree_ac = math.acos((to_a**2+to_C**2-to_b**2) / 2*to_a*to_C)
@@ -49,7 +49,7 @@ class MesureByEi():
 
 class MesureByLength():
 
-    def mesure(self, to_a, to_b) -> (power_a, power_b):
+    def mesure(self, to_a, to_b) -> (float, float):
         """
         use to_a and to_b distance to get power of wheel a and b
         """
