@@ -22,11 +22,17 @@ from queue import Queue
 
 # left wheel A
 # right wheel B
+
+# power
 _A_Power = PWMLED(4)
-_A_Reverse = PWMLED(17)
-_A_Park = PWMLED(27)
 _B_Power = PWMLED(18)
+
+# reverse
+_A_Reverse = PWMLED(17)
 _B_Reverse = PWMLED(23)
+
+# shut
+_A_Park = PWMLED(27)
 _B_Park = PWMLED(24)
 
 

@@ -5,6 +5,7 @@ Need to return motor power
 import gpiozero
 import math
 import recv
+from utils import logger
 
 
 # The distance between base station A and station B (unit: m)
@@ -48,23 +49,23 @@ class MesureByEi():
 
 
 class MesureByLength():
+    def _control_power(self, distance):
+        """
+        control velocity 
+        """
+        if distance > 7:
+            distance = 1
+        elif distance > 2:
+            distance = 0.2*distance
+        elif distance > 1:
+            distance = 0.1*distance
+        return distance
 
     def mesure(self, to_a, to_b) -> (float, float):
         """
         use to_a and to_b distance to get power of wheel a and b
         """
-        if to_a > 7:
-            self.power_a = 1
-        elif to_a > 2:
-            self.power_a = 0.1*to_a
-        elif to_a > 1:
-            self.power_a = 0.1*to_a
-
-        if to_b > 7:
-            self.power_b = 1
-        elif to_a > 2:
-            self.power_b = 0.1*to_b
-        elif to_a > 1:
-            self.power_b = 0.1*to_b
-
-        return self.power_a, self.power_b
+        power_a = _control_power(to_a)
+        power_b = _control_power(to_b)
+        logger(f"power_a: {power_a}, power_b: {power_b}")
+        return power_a, power_b

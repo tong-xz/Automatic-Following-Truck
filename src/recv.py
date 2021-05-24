@@ -31,8 +31,8 @@ def _get_uwb_distance(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
-            # logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
-            # logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
+            logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
+            logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
             _q_uwb_a.put(int(str(rcv0)[4:-1], 16)/10)
             _q_uwb_b.put(int(str(rcv1)[4:-1], 16)/10)
         except:
@@ -40,16 +40,19 @@ def _get_uwb_distance(port0, port1):
             print("err1: ", rcv1)
 
 
-def _get_uwb_distance_1(port0, port1):
+def _get_uwb_distance_strut(port0, port1):
     """
     use struct to decode 
     """
     while True:
-        # try:
-        rcv0 = port0.read(1)
-        rcv1 = port1.read(1)
-        _q_uwb_a.put(struct.unpack("B", rcv0))
-        _q_uwb_b.put(struct.unpack("B", rcv1))
+        try:
+            rcv0 = port0.read(1)
+            rcv1 = port1.read(1)
+            _q_uwb_a.put(struct.unpack("B", rcv0))
+            _q_uwb_b.put(struct.unpack("B", rcv1))
+        except:
+            print("err0: ", rcv0)
+            print("err1: ", rcv1)
 
 
 def _calculate_avg():
