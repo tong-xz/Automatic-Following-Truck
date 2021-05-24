@@ -104,3 +104,8 @@ def power_limitation(p):
         return 1
     else:
         return p
+
+
+if __name__ == "__main__":
+    while(True):
+        forward(1)
