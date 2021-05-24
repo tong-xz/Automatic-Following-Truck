@@ -10,7 +10,7 @@ to_C = 0.2
 
 def get_distance(to_a, to_b) -> float:
     """
-    Get the distance from person to car 
+    Get the REALL distance from person to car 
     用了余弦定理
     """
     # Degree between a and c
@@ -23,13 +23,12 @@ def get_distance(to_a, to_b) -> float:
 
 def get_direction_degree(to_a, to_b, distance) -> (int, float):
     """
-    Get the (direction, degree) of turn direction
+    Get the (direction, degree=cos(angle)) of turn direction.
 
-    diretion: 
-        0=left
-        1=right
-    degree:
-        The cos of angle from the person to the midpoint of the car
+    1. diretion: 
+        - 0=left
+        - 1=right
+    2. degree: The cos of angle from the person to the midpoint of the car
     """
     # determin direction
     if to_a > to_b:

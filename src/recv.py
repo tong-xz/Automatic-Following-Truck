@@ -15,9 +15,10 @@ import init
 
 # The global queue
 # The uwb raw data
-__q_uwb_a = Queue(100)
-__q_uwb_b = Queue(100)
-# The ripe data
+__q_uwb_a = Queue(16)
+__q_uwb_b = Queue(16)
+
+# The ripe data which have been get average and filter(TODO)
 q_to_a = Queue()
 q_to_b = Queue()
 
@@ -52,23 +53,30 @@ def __get_uwb_distance_1(port0, port1):
 
 
 def get_distance():
-    """TODO: 暂时还没有写好
-    get average value of the distance queue
     """
-    # to_b = 0
-    # to_a = 0
-    # if q_uwb_a.full() or q_uwb_b.full():
-    #     # logger("HERE")
-    #     for i in range(10):
-    #         to_a += q_uwb_a.get()
-    #     for i in range(10):
-    #         to_b += q_uwb_b.get()
-
-    #     q_to_a.put(to_a / 10)
-    #     q_to_b.put(to_b / 10)
+    put ripe value of the distance queue
+    """
     p0, p1 = init.serial_init_port()
     logger("get_uwb_distance")
+    # start recv data
     threading.Thread(target=__get_uwb_distance, args=(
         p0, p1), name="get_uwb_distance").start()
-    q_to_a.put(__q_uwb_a.get())
-    q_to_b.put(__q_uwb_b.get())
+    threading.Thread(target=__calculate_avg, name="calculate_avg").start()
+
+
+def __calculate_avg():
+    while (True):
+        if __q_uwb_a.full() or __q_uwb_b.full():
+            to_a = 0
+            to_b = 0
+            # logger("HERE")
+            for i in range(16):
+                to_a += __q_uwb_a.get()
+            for i in range(16):
+                to_b += __q_uwb_b.get()
+
+            logger(f"to_a: {to_a}")
+            logger(f"to_b: {to_b}")
+
+            q_to_a.put(to_a / 16)
+            q_to_b.put(to_b / 16)
