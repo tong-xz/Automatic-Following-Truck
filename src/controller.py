@@ -3,9 +3,10 @@ import recv
 import direct
 import move
 from utils import logger
+from direct import MesureByLength
 
 
-def __resume_distance() -> (float, float):
+def _resume_distance() -> (float, float):
     """
     Resume the distance from uwb sensor
     """
@@ -14,7 +15,7 @@ def __resume_distance() -> (float, float):
     return (to_a, to_b)
 
 
-def __control_velocity(distance):
+def _control_velocity(distance):
     """
     control velocity 
     """
@@ -27,6 +28,22 @@ def __control_velocity(distance):
         move.forward(0)
 
 
+def control_by_e_i_theta(to_a, to_b):
+    # get distance between person and car
+    distance = direct.get_distance(to_a, to_b)
+    # get direction and degree of angle
+    direction, degree = direct.get_direction_degree(to_a, to_b)
+
+    logger(f"direction: {direction}, degree: {degree}")
+    # FIXME: here repeatly control the power of wheel
+    if direction == 0:
+        move.turn_left(degree)
+    else:
+        move.turn_right(degree)
+    # control velocity
+    _control_velocity(distance)
+
+
 def control():
     """
     The controller manager
@@ -35,19 +52,7 @@ def control():
         threading.Thread(target=recv.get_distance,
                          name="recv.get_distance").start()
         # get ripe data
-        to_a, to_b = __resume_distance()
-        # get distance between person and car
-        distance = direct.get_distance(to_a, to_b)
-        # get direction and degree of angle
-        direction, degree = direct.get_direction_degree(to_a, to_b)
-
-        logger(f"direction: {direction}, degree: {degree}")
-
-        # here repeatly control the power of wheel
-
-        if direction == 0:
-            move.turn_left(degree)
-        else:
-            move.turn_right(degree)
-        # control velocity
-        __control_velocity(distance)
+        to_a, to_b = _resume_distance()
+        m = MesureByLength()
+        power_a, power_b = m.mesure()
+        move.base_movement(power_a, power_b)

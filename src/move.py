@@ -10,8 +10,8 @@ from queue import Queue
 
 
 # # all movement queue
-# __q_a = Queue()
-# __q_b = Queue()
+# _q_a = Queue()
+# _q_b = Queue()
 
 
 # def aaa():
@@ -22,12 +22,12 @@ from queue import Queue
 
 # left wheel A
 # right wheel B
-__A_Power = PWMLED(4)
-__A_Reverse = PWMLED(17)
-__A_Park = PWMLED(27)
-__B_Power = PWMLED(18)
-__B_Reverse = PWMLED(23)
-__B_Park = PWMLED(24)
+_A_Power = PWMLED(4)
+_A_Reverse = PWMLED(17)
+_A_Park = PWMLED(27)
+_B_Power = PWMLED(18)
+_B_Reverse = PWMLED(23)
+_B_Park = PWMLED(24)
 
 
 def base_movement(p0, p1, r0=False, r1=False):
@@ -44,57 +44,57 @@ def base_movement(p0, p1, r0=False, r1=False):
 
     # the backward situation
     if r0:
-        __A_Reverse.value = 0.0
+        _A_Reverse.value = 0.0
     else:
-        __A_Reverse.value = 1.0
+        _A_Reverse.value = 1.0
 
     if r1:
-        __B_Reverse.value = 1.0
+        _B_Reverse.value = 1.0
     else:
-        __B_Reverse.value = 0.0
+        _B_Reverse.value = 0.0
 
-    __A_Power.value = p0
-    __B_Power.value = p1
+    _A_Power.value = p0
+    _B_Power.value = p1
 
 
 def forward(velocity):
     velocity = power_limitation(velocity)
-    __A_Reverse.value = 1.0
-    __B_Reverse.value = 0.0
-    __A_Power.value = velocity
-    __B_Power.value = velocity
+    _A_Reverse.value = 1.0
+    _B_Reverse.value = 0.0
+    _A_Power.value = velocity
+    _B_Power.value = velocity
 
 
 def backward(velocity):
     velocity = power_limitation(velocity)
-    __A_Reverse.value = 0.0
-    __B_Reverse.value = 1.0
-    __A_Power.value = velocity
-    __B_Power.value = velocity
+    _A_Reverse.value = 0.0
+    _B_Reverse.value = 1.0
+    _A_Power.value = velocity
+    _B_Power.value = velocity
 
 
 def turn_right(velocity):
     velocity = power_limitation(velocity)
-    __A_Reverse.value = 1.0
-    __B_Reverse.value = 1.0
-    __A_Power.value = velocity
-    __B_Power.value = velocity
+    _A_Reverse.value = 1.0
+    _B_Reverse.value = 1.0
+    _A_Power.value = velocity
+    _B_Power.value = velocity
 
 
 def turn_left(velocity):
     velocity = power_limitation(velocity)
-    __A_Reverse.value = 0.0
-    __B_Reverse.value = 0.0
-    __A_Power.value = velocity
-    __B_Power.value = velocity
+    _A_Reverse.value = 0.0
+    _B_Reverse.value = 0.0
+    _A_Power.value = velocity
+    _B_Power.value = velocity
 
 
 def slide():
     """
     no power input and silde 
     """
-    __A_Power.value = 0
-    __B_Power.value = 0
+    _A_Power.value = 0
+    _B_Power.value = 0
 
 
 def power_limitation(p):
