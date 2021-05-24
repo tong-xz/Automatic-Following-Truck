@@ -31,8 +31,8 @@ def _get_uwb_distance(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
-            logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
-            logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
+            # logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
+            # logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
             _q_uwb_a.put(int(str(rcv0)[4:-1], 16)/10)
             _q_uwb_b.put(int(str(rcv1)[4:-1], 16)/10)
         except:
@@ -68,6 +68,7 @@ def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
     if q_ori.qsize() >= num:
         for i in range(size):
             total += q_ori.get()
+        logger(f"avg: {total}")
         q_dst.put(total / size)
         time.sleep(0.02)
 
