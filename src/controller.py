@@ -46,7 +46,7 @@ def control_by_e_i_theta(to_a, to_b):
 
 def control():
     """
-    The controller manager
+    The main controller manager
     """
     while (True):
         threading.Thread(target=recv.get_distance,
