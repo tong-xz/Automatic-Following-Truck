@@ -7,6 +7,7 @@ from queue import Queue
 import time
 import threading
 from utils import logger
+import init
 
 
 # The global queue
@@ -60,7 +61,15 @@ def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
         q_dst.put(total / size)
 
 
-if __name__ == "__main__":
+def store_uwb(recv, file_name):
+    with open(file_name, mode="ab") as _f:
+        _f.write(recv)
+
+
+def simulate_random():
+    """
+    这个是用于模拟随机生成与计算
+    """
     threading.Thread(target=_generate_random_queue,
                      args=(_q_uwb_a, _q_uwb_b)).start()
 
@@ -69,3 +78,11 @@ if __name__ == "__main__":
     threading.Thread(target=_resume_queue,
                      args=(q_to_a, q_to_b)).start()
     print("hello")
+
+
+if __name__ == "__main__":
+    p0, p1 = init.serial_init_port()
+    rcv0 = p0.read(1)
+    rcv1 = p1.read(1)
+    store_uwb(rcv0, "./uwb0.recv")
+    store_uwb(rcv1, "./uwb1.recv")
