@@ -7,7 +7,7 @@ This file used to control basic movement
 from gpiozero import PWMLED
 from time import sleep
 from queue import Queue
-
+from utils import logger
 
 # # all movement queue
 # _q_a = Queue()
@@ -59,6 +59,7 @@ def base_movement(p0, p1, r0=False, r1=False):
     else:
         _B_Reverse.value = 0.0
 
+    logger(f"power_a: {p0}, power_b: {p1}")
     _A_Power.value = p0
     _B_Power.value = p1
 

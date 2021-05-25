@@ -31,16 +31,19 @@ def _get_uwb_distance(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
-            logger(f"to_a: {int(str(rcv0)[4:-1], 16)/10}")
-            logger(f"to_b: {int(str(rcv1)[4:-1], 16)/10}")
-            _q_uwb_a.put(int(str(rcv0)[4:-1], 16)/10)
-            _q_uwb_b.put(int(str(rcv1)[4:-1], 16)/10)
+            d0 = int(str(rcv0)[4:-1], 16)/10
+            d1 = int(str(rcv1)[4:-1], 16)/10
+            logger(f"to_a: {d0}, recv: {rcv0}")
+            logger(f"to_b: {d1}, recv: {rcv1}")
+            _q_uwb_a.put(d0)
+            _q_uwb_b.put(d1)
         except:
-            print("err0: ", rcv0)
-            print("err1: ", rcv1)
+            pass
+            # print("err0: ", rcv0)
+            # print("err1: ", rcv1)
 
 
-def _get_uwb_distance_strut(port0, port1):
+def _get_uwb_distance_struct(port0, port1):
     """
     use struct to decode 
     """
@@ -48,8 +51,12 @@ def _get_uwb_distance_strut(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
-            _q_uwb_a.put(struct.unpack("B", rcv0))
-            _q_uwb_b.put(struct.unpack("B", rcv1))
+            d0 = struct.unpack("BB", rcv0)
+            d1 = struct.unpack("BB", rcv1)
+            logger(f"to_a: {d0}")
+            logger(f"to_b: {d1}")
+            _q_uwb_a.put(d0)
+            _q_uwb_b.put(d1)
         except:
             print("err0: ", rcv0)
             print("err1: ", rcv1)
@@ -71,7 +78,7 @@ def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
     if q_ori.qsize() >= num:
         for i in range(size):
             total += q_ori.get()
-        logger(f"avg: {total}")
+        logger(f"avg: {total / size}")
         q_dst.put(total / size)
         time.sleep(0.02)
 

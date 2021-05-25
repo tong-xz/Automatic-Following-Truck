@@ -54,5 +54,5 @@ def control():
         # get ripe data
         to_a, to_b = _resume_distance()
         m = MesureByLength()
-        power_a, power_b = m.mesure()
+        power_a, power_b = m.mesure(to_a, to_b)
         move.base_movement(power_a, power_b)

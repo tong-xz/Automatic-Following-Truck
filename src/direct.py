@@ -65,7 +65,6 @@ class MesureByLength():
         """
         use to_a and to_b distance to get power of wheel a and b
         """
-        power_a = _control_power(to_a)
-        power_b = _control_power(to_b)
-        logger(f"power_a: {power_a}, power_b: {power_b}")
+        power_a = self._control_power(to_a)
+        power_b = self._control_power(to_b)
         return power_a, power_b
