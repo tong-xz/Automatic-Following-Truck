@@ -13,7 +13,7 @@ CRITICAL	50	            logger.critical()
 
 
 import threading
-import recevicer
+import receiver
 import processor
 import controller
 from loguru import logger

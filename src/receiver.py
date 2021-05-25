@@ -22,7 +22,7 @@ _q_uwb_b = Queue(32)
 q_to_a = Queue()
 q_to_b = Queue()
 
-p0, p1 = init.serial_init_port()
+_p0, _p1 = init.serial_init_port()
 
 
 def _get_uwb_distance(port0, port1):
@@ -59,18 +59,25 @@ def _get_uwb_distance_struct(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
+
+            # 避免空数据
             if rcv0 == b'' or rcv1 == b'':
                 continue
+
             d0 = struct.unpack("@B", rcv0)[0]
             d1 = struct.unpack("@B", rcv1)[0]
             logger.trace(f"to_a: {d0}\t recv: {rcv0}\t bin: {bin(d0)}")
             logger.trace(f"to_b: {d1}\t recv: {rcv1}\t bin: {bin(d1)}")
+
+            # 警告错数据
             if d0 > 200 or d1 > 200:
                 logger.warning("距离太长")
+
             d0 /= 10
             d1 /= 10
             _q_uwb_a.put(d0)
             _q_uwb_b.put(d1)
+
         except SerialException as e:
             logger.error(f"Serial is repeat config: {e}")
 
@@ -80,6 +87,9 @@ def _get_uwb_distance_struct(port0, port1):
 
 
 def _calculate_avg():
+    """
+    Calculate right and left uwb distance data 
+    """
     while (True):
         _avg_num(_q_uwb_a, q_to_a, "to_a", 16)
         _avg_num(_q_uwb_b, q_to_b, "to_b", 16)
@@ -100,11 +110,12 @@ def _avg_num(q_ori: Queue, q_dst: Queue, name: str, num: int):
         time.sleep(0.015)
 
 
-def get_distance():
+def put_distance():
     """
+    是整个文件的入口, 把可用数据放到缓冲区(队列)中 
     put ripe value of the distance queue
     """
     # start recv data
     threading.Thread(target=_get_uwb_distance_struct, args=(
-        p0, p1), name="get_distance").start()
+        _p0, _p1), name="put_distance").start()
     threading.Thread(target=_calculate_avg, name="calculate_avg").start()
