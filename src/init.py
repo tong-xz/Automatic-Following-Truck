@@ -13,6 +13,6 @@ def serial_init_port():
     1. serial_port0: uwbA
     2. serial_port1: uwbB
     """
-    serial_port1 = serial.Serial("/dev/ttyAMA3", baudrate=115200, timeout=3.0)
-    serial_port0 = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=3.0)
+    serial_port1 = serial.Serial("/dev/ttyAMA3", baudrate=115200, timeout=5.0)
+    serial_port0 = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=5.0)
     return serial_port0, serial_port1

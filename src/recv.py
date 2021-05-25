@@ -8,10 +8,10 @@ import struct
 import threading
 import random
 import time
-import dev
-import utils
-from utils import logger
 import init
+from loguru import logger
+from serial.serialutil import SerialException
+
 
 # The global queue
 # The uwb raw data
@@ -22,25 +22,33 @@ _q_uwb_b = Queue(32)
 q_to_a = Queue()
 q_to_b = Queue()
 
+p0, p1 = init.serial_init_port()
+
 
 def _get_uwb_distance(port0, port1):
     """
     Get UWB return distance value (unit: m) 
     """
+    counter = 0
     while True:
         try:
+            counter += 1
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
             d0 = int(str(rcv0)[4:-1], 16)/10
             d1 = int(str(rcv1)[4:-1], 16)/10
-            logger(f"to_a: {d0}, recv: {rcv0}")
-            logger(f"to_b: {d1}, recv: {rcv1}")
+            if counter >= 10:
+                logger.trace(f"to_a: {d0}, recv: {rcv0}")
+                logger.trace(f"to_b: {d1}, recv: {rcv1}")
+                counter = 0
             _q_uwb_a.put(d0)
             _q_uwb_b.put(d1)
         except:
-            pass
-            # print("err0: ", rcv0)
-            # print("err1: ", rcv1)
+            if rcv0 != b'':
+                print("err0: ", rcv0)
+
+            if rcv0 != b'':
+                print("err1: ", rcv1)
 
 
 def _get_uwb_distance_struct(port0, port1):
@@ -51,25 +59,34 @@ def _get_uwb_distance_struct(port0, port1):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
-            d0 = struct.unpack("BB", rcv0)
-            d1 = struct.unpack("BB", rcv1)
-            logger(f"to_a: {d0}")
-            logger(f"to_b: {d1}")
+            if rcv0 == b'' or rcv1 == b'':
+                continue
+            d0 = struct.unpack("@B", rcv0)[0]
+            d1 = struct.unpack("@B", rcv1)[0]
+            logger.trace(f"to_a: {d0}\t recv: {rcv0}\t bin: {bin(d0)}")
+            logger.trace(f"to_b: {d1}\t recv: {rcv1}\t bin: {bin(d1)}")
+            if d0 > 200 or d1 > 200:
+                logger.warning("距离太长")
+            d0 /= 10
+            d1 /= 10
             _q_uwb_a.put(d0)
             _q_uwb_b.put(d1)
-        except:
-            print("err0: ", rcv0)
-            print("err1: ", rcv1)
+        except SerialException as e:
+            logger.error(f"Serial is repeat config: {e}")
+
+        except Exception as e:
+            logger.error("Exception: ", e)
+            logger.error("err0: ", rcv0, "err1: ", rcv1)
 
 
 def _calculate_avg():
     while (True):
-        _avg_num(_q_uwb_a, q_to_a, 16)
-        _avg_num(_q_uwb_b, q_to_b, 16)
-        time.sleep(0.02)
+        _avg_num(_q_uwb_a, q_to_a, "to_a", 16)
+        _avg_num(_q_uwb_b, q_to_b, "to_b", 16)
+        time.sleep(0.015)
 
 
-def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
+def _avg_num(q_ori: Queue, q_dst: Queue, name: str, num: int):
     """
     calculate avg value and put it into queue
     """
@@ -78,18 +95,16 @@ def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
     if q_ori.qsize() >= num:
         for i in range(size):
             total += q_ori.get()
-        logger(f"avg: {total / size}")
+        logger.success(f"{name} avg: {total / size}")
         q_dst.put(total / size)
-        time.sleep(0.02)
+        time.sleep(0.015)
 
 
 def get_distance():
     """
     put ripe value of the distance queue
     """
-    p0, p1 = init.serial_init_port()
-    logger("get_uwb_distance")
     # start recv data
-    threading.Thread(target=_get_uwb_distance, args=(
-        p0, p1), name="get_uwb_distance").start()
+    threading.Thread(target=_get_uwb_distance_struct, args=(
+        p0, p1), name="get_distance").start()
     threading.Thread(target=_calculate_avg, name="calculate_avg").start()

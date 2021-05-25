@@ -62,8 +62,7 @@ def _avg_num(q_ori: Queue, q_dst: Queue, num: int):
 
 
 def store_uwb(recv, file_name):
-    with open(file_name, mode="ab") as _f:
-        _f.write(recv)
+    pass
 
 
 def simulate_random():
@@ -82,7 +81,10 @@ def simulate_random():
 
 if __name__ == "__main__":
     p0, p1 = init.serial_init_port()
-    rcv0 = p0.read(1)
-    rcv1 = p1.read(1)
-    store_uwb(rcv0, "./uwb0.recv")
-    store_uwb(rcv1, "./uwb1.recv")
+    with open("./uwb.recv", mode="a") as _f:
+        while(True):
+            rcv0 = p0.read_all()
+            rcv1 = p1.read_all()
+            logger(f"rcv0: {rcv0}, rcv1: {rcv1}")
+            _f.write(rcv0.decode())
+            _f.write(rcv1.decode())

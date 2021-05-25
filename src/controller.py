@@ -2,7 +2,7 @@ import threading
 import recv
 import direct
 import move
-from utils import logger
+from loguru import logger
 from direct import MesureByLength
 
 
@@ -29,13 +29,13 @@ def _control_velocity(distance):
 
 
 def control_by_e_i_theta(to_a, to_b):
+    # FIXME: here repeatly control the power of wheel
     # get distance between person and car
     distance = direct.get_distance(to_a, to_b)
     # get direction and degree of angle
     direction, degree = direct.get_direction_degree(to_a, to_b)
 
-    logger(f"direction: {direction}, degree: {degree}")
-    # FIXME: here repeatly control the power of wheel
+    logger.success(f"direction: {direction}, degree: {degree}")
     if direction == 0:
         move.turn_left(degree)
     else:

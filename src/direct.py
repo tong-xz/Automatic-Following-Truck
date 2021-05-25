@@ -5,7 +5,6 @@ Need to return motor power
 import gpiozero
 import math
 import recv
-from utils import logger
 
 
 # The distance between base station A and station B (unit: m)
