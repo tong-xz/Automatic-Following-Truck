@@ -15,7 +15,9 @@ def process():
     """
     The processor base on distance controller
     """
-    logger.success("Processor start")
+    logger.info(f"<start> Processor start")
+    logger.info(f"<start> controller manager start")
+    manager = controller.ControlByLength()
     while (True):
         # Resume the distance from uwb sensor
         threading.Thread(target=receiver.put_distance,
@@ -26,7 +28,6 @@ def process():
         to_b = receiver.q_to_b.get()
 
         # get instructions
-        manager = controller.ControlByLength()
         power_a, power_b = manager.control(to_a, to_b)
 
         # the feedback part
