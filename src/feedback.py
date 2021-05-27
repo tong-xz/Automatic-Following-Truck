@@ -1,4 +1,8 @@
-# This module is used to get the data of Avoiding obstacles components
+"""
+
+
+This module is used to get the data of Avoiding obstacles components
+"""
 
 from threading import main_thread
 from gpiozero import DistanceSensor
