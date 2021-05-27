@@ -9,15 +9,6 @@ from time import sleep
 from queue import Queue
 from loguru import logger
 
-# # all movement queue
-# _q_a = Queue()
-# _q_b = Queue()
-
-
-# def aaa():
-#     """
-#     This function is used to move smoothly
-#     """
 
 
 # left wheel A
@@ -36,14 +27,21 @@ _A_Park = PWMLED(27)
 _B_Park = PWMLED(24)
 
 
-def base_movement(p0, p1, r0=False, r1=False):
+def base_movement(p0=0, p1=0, r0=False, r1=False, is_shut=False):
     """
     The base movement of controlling the two motor power
     - p0: power of 0 wheel 
     - p1: power of 1 wheel
     - r0: reverse of roll, the default is forward, False is backward
     - r1: reverse of roll, the default is forward, False is backward
+    the default status is slide
     """
+    if is_shut:
+        _A_Park.value = 1.0
+        _B_Park.value = 1.0
+        logger.success(f"---- shut ----")
+        return
+
     # limitation the value between [0, 1]
     p0 = power_limitation(p0)
     p1 = power_limitation(p1)
@@ -94,14 +92,6 @@ def turn_left(velocity):
     _B_Reverse.value = 0.0
     _A_Power.value = velocity
     _B_Power.value = velocity
-
-
-def slide():
-    """
-    no power input and silde 
-    """
-    _A_Power.value = 0
-    _B_Power.value = 0
 
 
 def power_limitation(p):
