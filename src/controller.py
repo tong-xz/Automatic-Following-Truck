@@ -60,13 +60,14 @@ class ControlByLength():
         """
         control power base on divide distance levels
         """
+        power = 0
         if distance > 7:
-            distance = 1
+            power = 1
         elif distance > 2:
-            distance = 0.2*distance
+            power = 0.2*distance
         elif distance > 1:
-            distance = 0.1*distance
-        return distance
+            power = 0.1*distance
+        return power
 
     def control(self, to_a, to_b) -> (float, float):
         """
