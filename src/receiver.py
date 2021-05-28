@@ -79,7 +79,8 @@ def _get_uwb_distance_struct(port0, port1):
             _q_uwb_b.put(d1)
 
         except SerialException as e:
-            logger.error(f"Serial is repeat config: {e}")
+            # logger.error(f"Serial is repeat config: {e}")
+            pass
 
         except Exception as e:
             logger.error("Exception: ", e)

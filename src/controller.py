@@ -5,7 +5,7 @@ Using all the information received, return the power of the two wheels
 """
 import gpiozero
 import math
-import recv
+import receiver
 
 
 # The distance between base station A and station B (unit: m)
