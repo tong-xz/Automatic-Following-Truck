@@ -8,15 +8,15 @@ button = Button(26)
 
 def work():
     print('work')
-    led.value=1
+    # led.value=1
 
 def sleep():
     print('sleep')
     led.value=0
 
-print(button.value())
+print(button.value)
 button.wait_for_press()
-print(button.value())
+print(button.value)
 
 button.when_pressed = work
 print('hello')
