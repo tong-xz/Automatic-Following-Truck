@@ -61,13 +61,28 @@ class ControlByLength():
         control power base on divide distance levels
         """
         power = 0
-        if distance > 7:
-            power = 1
-        elif distance > 2:
-            power = 0.2*distance
+        if distance > 4:
+            power = 0
+        elif distance > 3:
+            power = 0.13*distance
         elif distance > 1:
-            power = 0.1*distance
+            power = 0.12*distance
         return power
+
+    def amp_diff(self, power_a, power_b):
+
+        # diff
+        # diff_power = abs((to_a - to_b))*4
+        if power_a > power_b:
+            power_a /= 1.75
+            # power_a -= diff_power 
+            # power_b += diff_power
+        else:
+            power_b /= 1.75
+            # power_a += diff_power
+            # power_b -= diff_power
+
+        return power_a, power_b
 
     def control(self, to_a, to_b) -> (float, float):
         """
@@ -75,4 +90,5 @@ class ControlByLength():
         """
         power_a = self._control_power(to_a)
         power_b = self._control_power(to_b)
+        power_a, power_b = self.amp_diff(power_a, power_b)
         return power_a, power_b

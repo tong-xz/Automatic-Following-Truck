@@ -29,5 +29,6 @@ if __name__ == "__main__":
     while (counter > 0):
         print("味全小车启动! "*10+"\n")
         counter -= 1
+    # logger.level("INFO")
     logger.level("TRACE")
     main()

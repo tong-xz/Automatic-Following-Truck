@@ -41,23 +41,27 @@ def base_movement(p0=0, p1=0, r0=False, r1=False, is_shut=False):
         _B_Park.value = 1.0
         logger.success(f"---- shut ----")
         return
+    _A_Reverse.value = 1.0
+    _B_Reverse.value = 1.0
 
     # limitation the value between [0, 1]
     p0 = power_limitation(p0)
     p1 = power_limitation(p1)
 
     # the backward situation
-    if r0:
-        _A_Reverse.value = 0.0
-    else:
-        _A_Reverse.value = 1.0
+    # if r0:
+    #     _A_Reverse.value = 0.0
+    # else:
+    #     _A_Reverse.value = 1.0
 
-    if r1:
-        _B_Reverse.value = 1.0
-    else:
-        _B_Reverse.value = 0.0
+    # if r1:
+    #     _B_Reverse.value = 1.0
+    # else:
+    #     _B_Reverse.value = 0.0
 
-    logger.success(f"power_a: {p0}, power_b: {p1}")
+    logger.success(f"[======================]")
+    logger.success(f"[A: {p0} ------ B: {p1}]")
+    logger.success(f"[======================]")
     _A_Power.value = p0
     _B_Power.value = p1
 
@@ -65,7 +69,7 @@ def base_movement(p0=0, p1=0, r0=False, r1=False, is_shut=False):
 def forward(velocity):
     velocity = power_limitation(velocity)
     _A_Reverse.value = 1.0
-    _B_Reverse.value = 0.0
+    _B_Reverse.value = 1.0
     _A_Power.value = velocity
     _B_Power.value = velocity
 
@@ -107,4 +111,5 @@ if __name__ == "__main__":
     logger.critical("现在开始测试!")
     while(True):
         base_movement(1, 1)
+        # forward(1)
         sleep(1)

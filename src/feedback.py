@@ -42,7 +42,8 @@ def _get_ultra_distances():
     """
     获得左右车头两个超声波传感器的距离 (单位 m)
     """
-    logger.info(f"ultra: [left]{_ultra_head_left.distance}, [right]{_ultra_head_right.distance}")
+    logger.info(
+        f"ultra: [left]{_ultra_head_left.distance}, [right]{_ultra_head_right.distance}")
     _q_ultra_left_raw.put(_ultra_head_left.distance)
     _q_ultra_right_raw.put(_ultra_head_right.distance)
 
@@ -51,7 +52,8 @@ def _get_infrared_info():
     """
     红外返回1/0 1-无障碍物 0-有障碍物
     """
-    logger.info(f"infra: [left] {_infra_left.value}, [right] {_infra_right.value}, [bottom] {_infra_bottom.value}")
+    logger.info(
+        f"infra: [left] {_infra_left.value}, [right] {_infra_right.value}, [bottom] {_infra_bottom.value}")
     _q_infra_bottom_raw.put(_infra_bottom.value)
     _q_infra_left_raw.put(_infra_left.value)
     _q_infra_right_raw.put(_infra_right.value)
@@ -59,10 +61,12 @@ def _get_infrared_info():
 
 def put_distance():
     logger.info(f"<start> feedback put_distance")
-    threading.Thread(target=_get_ultra_distances,name="get_ultra_distances").start()
-    threading.Thread(target=_get_infrared_info,name="get_infrared_info").start()
-    threading.Thread(target=_calculate_avg_feedback,name="calculate_avg_feedback").start()
-
+    threading.Thread(target=_get_ultra_distances,
+                     name="get_ultra_distances").start()
+    threading.Thread(target=_get_infrared_info,
+                     name="get_infrared_info").start()
+    threading.Thread(target=_calculate_avg_feedback,
+                     name="calculate_avg_feedback").start()
 
 
 def _calculate_avg_feedback():
@@ -70,13 +74,17 @@ def _calculate_avg_feedback():
     Calculate right and left uwb distance data 
     """
     logger.info(f"<start> calculate avg feedback")
+    last_turn = 0
+    # start = time.time()
     while (True):
-        _avg_num(_q_infra_left_raw, q_infra_left, "infra0", 10)
-        _avg_num(_q_infra_right_raw, q_infra_right, "infra1", 10)
-        _avg_num(_q_infra_bottom_raw, q_infra_bottom, "infra2", 10)
-        _avg_num(_q_ultra_left_raw, q_ultra_left, "ultra0", 10)
-        _avg_num(_q_ultra_right_raw, q_ultra_right, "ultra1", 10)
-        time.sleep(0.005)
+        _avg_num(_q_infra_left_raw, q_infra_left, "infra0", 3)
+        _avg_num(_q_infra_right_raw, q_infra_right, "infra1", 3)
+        _avg_num(_q_infra_bottom_raw, q_infra_bottom, "infra2", 3)
+        _avg_num(_q_ultra_left_raw, q_ultra_left, "ultra0", 3)
+        _avg_num(_q_ultra_right_raw, q_ultra_right, "ultra1", 3)
+        # now = time.time()
+        # logger.success(f"feedback time: {now - start}")
+        # start = time.time()
 
 
 def _avg_num(q_ori: Queue, q_dst: Queue, name: str, num: int):
@@ -88,6 +96,6 @@ def _avg_num(q_ori: Queue, q_dst: Queue, name: str, num: int):
     if size >= num:
         for i in range(size):
             total += q_ori.get()
-        logger.success(f"{name} avg: {total / size}")
+        logger.success(f"<Avg> {name}: {total / size}")
         q_dst.put(total / size)
         # time.sleep(0.015)

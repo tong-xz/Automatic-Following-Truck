@@ -18,12 +18,12 @@ def process():
     logger.info(f"<start> Processor start")
     logger.info(f"<start> controller manager start")
     manager = controller.ControlByLength()
+    # Resume the distance from uwb sensor
+    threading.Thread(target=receiver.put_distance,
+                        name="get_distance_receiver").start()
+    threading.Thread(target=feedback.put_distance,
+                        name="get_distance_feedback").start()
     while (True):
-        # Resume the distance from uwb sensor
-        threading.Thread(target=receiver.put_distance,
-                         name="get_distance_receiver").start()
-        threading.Thread(target=feedback.put_distance,
-                         name="get_distance_feedback").start()
         to_a = receiver.q_to_a.get()
         to_b = receiver.q_to_b.get()
 
@@ -31,20 +31,23 @@ def process():
         power_a, power_b = manager.control(to_a, to_b)
 
         # the feedback part
-        infra_left = feedback.q_infra_left.get()
-        infra_bottom = feedback.q_infra_bottom.get()
-        infra_right = feedback.q_infra_right.get()
-        ultra_left = feedback.q_ultra_left.get()
-        ultra_right = feedback.q_ultra_right.get()
+        # infra_left = feedback.q_infra_left.get(block=False)
+        # infra_bottom = feedback.q_infra_bottom.get(block=False)
+        # infra_right = feedback.q_infra_right.get(block=False)
+        # ultra_left = feedback.q_ultra_left.get(block=False)
+        # ultra_right = feedback.q_ultra_right.get(block=False)
 
-        # slow down
-        if ultra_left < 0.5 or ultra_right < 0.5:
-            power_a, power_b = 0, 0
+        # logger.success("here2")
+        # # slow down
+        # if ultra_left < 0.5 or ultra_right < 0.5:
+        #     logger.success("----- slow down -----")
+        #     power_a, power_b = 0, 0
 
-        # shut down
-        if infra_bottom > 0.05 or ultra_left < 0.3 or ultra_right < 0.3:
-            is_shut = True
-
+        # # shut down
+        # if infra_bottom > 0.05 or ultra_left < 0.3 or ultra_right < 0.3:
+        #     logger.success("----- shut down -----")
+        #     is_shut = True
+        is_shut = False
         movement.base_movement(p0=power_a, p1=power_b, is_shut=is_shut)
 
 
