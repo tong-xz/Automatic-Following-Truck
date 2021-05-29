@@ -1,0 +1,10 @@
+"filename", "language", "Python", "Markdown", "comment", "blank", "total"
+"e:\Automatic-Following-Truck\README.md", "Markdown", 0, 32, 0, 4, 36
+"e:\Automatic-Following-Truck\src\controller.py", "Python", 33, 0, 34, 12, 79
+"e:\Automatic-Following-Truck\src\feedback.py", "Python", 54, 0, 21, 19, 94
+"e:\Automatic-Following-Truck\src\init.py", "Python", 5, 0, 12, 5, 22
+"e:\Automatic-Following-Truck\src\main.py", "Python", 14, 0, 13, 7, 34
+"e:\Automatic-Following-Truck\src\movement.py", "Python", 65, 0, 20, 26, 111
+"e:\Automatic-Following-Truck\src\processor.py", "Python", 37, 0, 17, 13, 67
+"e:\Automatic-Following-Truck\src\receiver.py", "Python", 73, 0, 25, 24, 122
+"Total", "-", 281, 32, 142, 110, 565
