@@ -36,13 +36,17 @@ def base_movement(p0=0, p1=0, r0=False, r1=False, is_shut=False):
     - r1: reverse of roll, the default is forward, False is backward
     the default status is slide
     """
+    # init movement
+    _A_Reverse.value = 1.0
+    _B_Reverse.value = 1.0
+    _A_Park.value = 0.0
+    _B_Park.value = 0.0
+
     if is_shut:
         _A_Park.value = 1.0
         _B_Park.value = 1.0
         logger.success(f"---- shut ----")
         return
-    _A_Reverse.value = 1.0
-    _B_Reverse.value = 1.0
 
     # limitation the value between [0, 1]
     p0 = power_limitation(p0)
@@ -59,9 +63,7 @@ def base_movement(p0=0, p1=0, r0=False, r1=False, is_shut=False):
     # else:
     #     _B_Reverse.value = 0.0
 
-    logger.success(f"[======================]")
-    logger.success(f"[A: {p0} ------ B: {p1}]")
-    logger.success(f"[======================]")
+    logger.success(f"#[A] {p0} |=====|{p1} [B]#")
     _A_Power.value = p0
     _B_Power.value = p1
 

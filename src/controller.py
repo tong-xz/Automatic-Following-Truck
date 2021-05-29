@@ -58,29 +58,28 @@ class ControlByLength():
 
     def _control_power(self, distance):
         """
+        单边放大
         control power base on divide distance levels
         """
         power = 0
         if distance > 4:
             power = 0
         elif distance > 3:
-            power = 0.13*distance
+            power = 0.1*distance
         elif distance > 1:
             power = 0.12*distance
         return power
 
     def amp_diff(self, power_a, power_b):
-
+        """
+        放大差异
+        """
         # diff
-        # diff_power = abs((to_a - to_b))*4
         if power_a > power_b:
-            power_a /= 1.75
-            # power_a -= diff_power 
-            # power_b += diff_power
-        else:
             power_b /= 1.75
-            # power_a += diff_power
-            # power_b -= diff_power
+
+        else:
+            power_a /= 1.75
 
         return power_a, power_b
 
@@ -90,5 +89,14 @@ class ControlByLength():
         """
         power_a = self._control_power(to_a)
         power_b = self._control_power(to_b)
+
+        # Sharp turn
+        if to_a/to_b >= 1.5:
+            power_b = 0
+            return power_a, power_b
+        if to_b/to_a >= 1.5:
+            power_a = 0
+            return power_a, power_b
+
         power_a, power_b = self.amp_diff(power_a, power_b)
         return power_a, power_b

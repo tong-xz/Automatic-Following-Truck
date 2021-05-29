@@ -30,7 +30,7 @@ def _get_uwb_distance(port0, port1):
     Get UWB return distance value (unit: m) 
     """
     counter = 0
-    while True:
+    while (True):
         try:
             counter += 1
             rcv0 = port0.read(1)
@@ -55,7 +55,7 @@ def _get_uwb_distance_struct(port0, port1):
     """
     use struct to decode 
     """
-    while True:
+    while (True):
         try:
             rcv0 = port0.read(1)
             rcv1 = port1.read(1)
@@ -106,7 +106,7 @@ def _avg_num(q_ori: Queue, q_dst: Queue, name: str, num: int):
     if q_ori.qsize() >= num:
         for i in range(size):
             total += q_ori.get()
-        logger.success(f"{name} avg: {total / size}")
+        logger.success(f"<Avg> {name} : {total / size}")
         q_dst.put(total / size)
         time.sleep(0.015)
 
