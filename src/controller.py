@@ -6,6 +6,7 @@ Using all the information received, return the power of the two wheels
 import gpiozero
 import math
 import receiver
+from loguru import logger
 
 
 # The distance between base station A and station B (unit: m)
@@ -62,12 +63,12 @@ class ControlByLength():
         control power base on divide distance levels
         """
         power = 0
-        if distance > 4:
+        if distance > 3.5:
             power = 0
         elif distance > 3:
             power = 0.1*distance
         elif distance > 1:
-            power = 0.12*distance
+            power = 0.18*distance
         return power
 
     def amp_diff(self, power_a, power_b):
@@ -76,10 +77,12 @@ class ControlByLength():
         """
         # diff
         if power_a > power_b:
-            power_b /= 1.75
+            power_a *= 1.1
+            power_b *= 0.8
 
         else:
-            power_a /= 1.75
+            power_a *= 0.8
+            power_b *= 1.1
 
         return power_a, power_b
 
@@ -91,10 +94,15 @@ class ControlByLength():
         power_b = self._control_power(to_b)
 
         # Sharp turn
-        if to_a/to_b >= 1.5:
+        if to_a/to_b >= 1.3:
+            logger.warning("Sharp turn")
             power_b = 0
+            power_a *= 0.4
             return power_a, power_b
-        if to_b/to_a >= 1.5:
+            
+        if to_b/to_a >= 1.3:
+            logger.warning("Sharp turn")
+            power_b *= 0.4
             power_a = 0
             return power_a, power_b
 

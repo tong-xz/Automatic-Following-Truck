@@ -92,8 +92,8 @@ def _calculate_avg():
     Calculate right and left uwb distance data 
     """
     while (True):
-        _avg_num(_q_uwb_a, q_to_a, "to_a", 16)
-        _avg_num(_q_uwb_b, q_to_b, "to_b", 16)
+        _avg_num(_q_uwb_a, q_to_a, "to_a", 8)
+        _avg_num(_q_uwb_b, q_to_b, "to_b", 8)
         time.sleep(0.015)
 
 

@@ -18,6 +18,11 @@ def _get_move_instruction():
 
 
 def _get_feedback_instructions():
+    # ultra_left = 1
+    # ultra_right = 1
+    # infra_left = 1
+    # infra_right = 1
+    # infra_bottom = 0
     ultra_left = feedback._ultra_head_right.distance
     ultra_right = feedback._ultra_head_left.distance
     infra_left = feedback._infra_left.value
@@ -27,25 +32,6 @@ def _get_feedback_instructions():
 
 
 def _feedback_consume(power_a, power_b, ultra_left, ultra_right, infra_left, infra_bottom, infra_right):
-    logger.success(
-        f"<ultra> [left] {ultra_left} === {ultra_right} [right]")
-    logger.success(
-        f"<infra> {infra_bottom} || {infra_left} || {infra_right}")
-    # slow down
-    if ultra_left < 0.5 or ultra_right < 0.5:
-        logger.warning("----- slow down -----")
-        power_a, power_b = 0, 0
-
-    # shut down
-    if infra_bottom > 0.05 or ultra_left < 0.3 or ultra_right < 0.3:
-        logger.warning("----- shut down -----")
-        is_shut = True
-
-    # head avoid
-    if infra_right < 0.1:
-        power_a = power_a*0.8
-    if infra_right < 0.1:
-        power_b = power_b*0.8
 
     return power_a, power_b
 
@@ -71,8 +57,32 @@ def process():
         power_a, power_b = manager.control(to_a, to_b)
 
         # add feedback effect
-        power_a, power_b = _feedback_consume(
-            power_a, power_b, ultra_left, ultra_right, infra_left, infra_bottom, infra_right)
+        # power_a, power_b = _feedback_consume(
+        #     power_a, power_b, ultra_left, ultra_right, infra_left, infra_bottom, infra_right)
+        logger.success(
+            f"<ultra> [left] {ultra_left} === {ultra_right} [right]")
+        logger.success(
+            f"<infra> {infra_bottom} || {infra_left} || {infra_right}")
+        # slow down
+        if ultra_left < 0.5 or ultra_right < 0.5:
+            logger.warning("----- slow down -----")
+            power_a, power_b = 0, 0
+
+        # shut down
+        if infra_bottom > 0.05 or ultra_left < 0.3 or ultra_right < 0.3:
+            logger.warning("----- shut down -----")
+            is_shut = True
+
+        # head avoid
+        if infra_right < 0.1:
+            logger.warning("----- infra_right -----")
+            power_b = power_b*0.7
+            # power_a = power_a*1.05
+
+        if infra_left < 0.1:
+            logger.warning("----- infra_left -----")
+            # power_b = power_b*1.05
+            power_a = power_a*0.7
 
         movement.base_movement(p0=power_a, p1=power_b, is_shut=is_shut)
 
